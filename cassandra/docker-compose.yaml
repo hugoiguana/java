@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+
+  cassandra:
+    image: $CASSANDRA_IMAGE
+    container_name: $CASSANDRA_CONTAINER_NAME
+    environment:
+      CASSANDRA_DC: $CASSANDRA_DB_LOCAL_DATACENTER
+    ports:
+      - $CASSANDRA_DB_EXTERNAL_PORT:$CASSANDRA_DB_INTERNAL_PORT
+    volumes:
+      - ./database/volume:/var/lib/cassandra
+      - ./database/config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+      - ./database/scripts/init.cql:/init.cql
+    networks:
+      - springboot-cassandra-network
+
+networks:
+  springboot-cassandra-network:
+    name: springboot-cassandra-network
+    #external: true
+
+

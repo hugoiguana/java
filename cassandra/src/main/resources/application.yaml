@@ -1,1 +1,38 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: ${CONTEXT_PATH:}
 
+spring:
+  application:
+    name: springboot-cassandra
+  #  profiles:
+  #    include:
+  #      - none
+  data:
+    cassandra:
+      schema-action: ${DB_SCHEMA_ACTION:NONE}
+      request:
+        timeout: ${DB_REQUEST_TIMEOUT:10s}
+      connection:
+        init-query-timeout: ${DB_CONNECTION_INIT_QUERY_TIMEOUT:10s}
+      keyspace-name: ${DB_KEYSPACE_NAME:appspace}
+      port: ${DB_PORT:9042}
+      contact-points: ${DB_HOST:localhost}
+      local-datacenter: ${DB_LOCAL_DATACENTER:datacenter1}
+      username: ${DB_USERNAME:cassandra}
+      password: ${DB_PASSWORD:cassandra}
+
+cassandra:
+  migration:
+    keyspace-name: ${DB_KEYSPACE_NAME:appspace}
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          cassandra:
+            core:
+              cql:
+                CqlTemplate: ${DB_CASSANDRA_LOG_INFO:DEBUG}

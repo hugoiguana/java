@@ -34,4 +34,4 @@ build/
 
 
 ### Cassandra ###
-/database/volume/*
+/cassandra/database/volume/*

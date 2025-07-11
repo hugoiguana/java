@@ -9,40 +9,57 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfiguration {
 
     @Bean
-    public TopicExchange topicExchange() {
-        return new TopicExchange("topic-exchange");
+    public TopicExchange topicExchangeOrderCreated() {
+        return new TopicExchange("topic-order-created", false, true);
     }
 
+    /*
     @Bean
     public DirectExchange directExchange() {
-        return new DirectExchange("direct-exchange");
+        return new DirectExchange("direct-exchange-order-created", true, true);
     }
 
     @Bean
     public FanoutExchange fanoutExchange() {
-        return new FanoutExchange("fanout-exchange");
+        return new FanoutExchange("fanout-exchange", true, true);
+    }
+    */
+
+    @Bean
+    public Queue topicQueueOrderCreatedUserSendEmailNotification() {
+        return new Queue("topic-order-created-user-send-email-notification", false, false, true);
     }
 
     @Bean
-    public Queue topicQueue() {
-        return new Queue("topic.queue");
+    public Queue topicQueueOrderCreatedFinancialNotification() {
+        return new Queue("topic-order-created-financial-notification", false, false, true);
     }
 
+
+    /*
     @Bean
     public Queue directQueue() {
-        return new Queue("direct.queue");
+        return new Queue("direct.queue", true, false, true);
     }
 
     @Bean
     public Queue fanoutQueue() {
-        return new Queue("fanout.queue");
+        return new Queue("fanout.queue", true, false, true);
+    }
+    */
+
+    @Bean
+    public Binding bindingTopiOrderCreatedUserNotification(Queue topicQueueOrderCreatedUserSendEmailNotification, TopicExchange topicExchangeOrderCreated) {
+        return BindingBuilder.bind(topicQueueOrderCreatedUserSendEmailNotification).to(topicExchangeOrderCreated).with("topic.order.created.#");
     }
 
     @Bean
-    public Binding bindingTopic(Queue topicQueue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(topicQueue).to(topicExchange).with("topic.key.#");
+    public Binding bindingTopicOrderCreatedFinancialNotification(Queue topicQueueOrderCreatedFinancialNotification, TopicExchange topicExchangeOrderCreated) {
+        return BindingBuilder.bind(topicQueueOrderCreatedFinancialNotification).to(topicExchangeOrderCreated).with("topic.order.created.#");
     }
 
+
+    /*
     @Bean
     public Binding bindingDirect(Queue directQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(directQueue).to(directExchange).with("direct.key");
@@ -52,5 +69,6 @@ public class RabbitMqConfiguration {
     public Binding bindingFanout(Queue fanoutQueue, FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(fanoutQueue).to(fanoutExchange);
     }
+    */
 
 }

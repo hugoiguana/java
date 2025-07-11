@@ -20,9 +20,9 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		amqpTemplate.convertAndSend("topic-exchange", "topic.key.1", "Message for topic");
-		amqpTemplate.convertAndSend("direct-exchange", "direct.key", "Message for direct");
-		amqpTemplate.convertAndSend("fanout-exchange", "", "Message for fanout");
+		amqpTemplate.convertAndSend("topic-order-created", "topic.order.created", "Message for topic");
+		//amqpTemplate.convertAndSend("direct-exchange", "direct.key", "Message for direct");
+		//amqpTemplate.convertAndSend("fanout-exchange", "", "Message for fanout");
 	}
 
 }

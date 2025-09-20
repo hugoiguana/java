@@ -1,17 +1,20 @@
 package com.hugo.java.springboot.rabbitmq.service_producer;
 
-import org.springframework.amqp.core.AmqpTemplate;
+import com.hugo.java.springboot.rabbitmq.service_producer.messaging.producer.Producer;
+import com.hugo.java.springboot.rabbitmq.service_producer.messaging.producer.dto.OrderCreatedMsgDto;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.UUID;
+
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-	AmqpTemplate amqpTemplate;
+    Producer producer;
 
-	public Application(AmqpTemplate amqpTemplate) {
-		this.amqpTemplate = amqpTemplate;
+	public Application(Producer producer) {
+		this.producer = producer;
 	}
 
 	public static void main(String[] args) {
@@ -20,9 +23,15 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		amqpTemplate.convertAndSend("topic-order-created", "topic.order.created", "Message for topic");
-		//amqpTemplate.convertAndSend("direct-exchange", "direct.key", "Message for direct");
-		//amqpTemplate.convertAndSend("fanout-exchange", "", "Message for fanout");
+
+        producer.sendOrderCreated(
+                OrderCreatedMsgDto.builder()
+                        .traceId(UUID.randomUUID())
+                        .productId(UUID.randomUUID())
+                        .quantity(2)
+                        .build()
+        );
+
 	}
 
 }

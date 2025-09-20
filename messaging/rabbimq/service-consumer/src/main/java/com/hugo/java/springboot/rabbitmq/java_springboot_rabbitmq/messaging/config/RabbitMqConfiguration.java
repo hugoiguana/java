@@ -7,6 +7,8 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.UUID;
+
 
 @Configuration
 public class RabbitMqConfiguration {
@@ -22,12 +24,12 @@ public class RabbitMqConfiguration {
         return new DirectExchange(ExchangeConstants.DIRECT_ORDER_CREATED, true, false);
     }
 
-    /*
     @Bean
-    public FanoutExchange fanoutExchange() {
-        return new FanoutExchange("fanout-exchange", true, true);
+    public FanoutExchange fanoutExchangeOrderCreated() {
+        return new FanoutExchange(ExchangeConstants.FANOUT_ORDER_CREATED, true, true);
     }
-    */
+
+
 
     @Bean
     public Queue topicQueueOrderCreatedUserSendEmailNotification() {
@@ -44,17 +46,11 @@ public class RabbitMqConfiguration {
         return new Queue(QueueConstants.DIRECT_ORDER_CREATED_FINANCIAL_NOTIFICATION, true, false, false);
     }
 
-    /*
     @Bean
-    public Queue directQueue() {
-        return new Queue("direct.queue", true, false, true);
+    public Queue fanoutQueueOrderCreatedFinancialNotification() {
+        return new Queue(String.format("%s-%s", QueueConstants.FANOUT_ORDER_CREATED_FINANCIAL_NOTIFICATION, UUID.randomUUID()), false, false, true);
     }
 
-    @Bean
-    public Queue fanoutQueue() {
-        return new Queue("fanout.queue", true, false, true);
-    }
-    */
 
     @Bean
     public Binding bindingTopiOrderCreatedUserNotification(Queue topicQueueOrderCreatedUserSendEmailNotification, TopicExchange topicExchangeOrderCreated) {
@@ -72,16 +68,10 @@ public class RabbitMqConfiguration {
         return BindingBuilder.bind(directQueueOrderCreatedFinancialNotification).to(directExchangeOrderCreated).with(RoutingKeyConstants.DIRECT_ORDER_CREATED);
     }
 
-    /*
-    @Bean
-    public Binding bindingDirect(Queue directQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(directQueue).to(directExchange).with("direct.key");
-    }
 
     @Bean
-    public Binding bindingFanout(Queue fanoutQueue, FanoutExchange fanoutExchange) {
-        return BindingBuilder.bind(fanoutQueue).to(fanoutExchange);
+    public Binding bindingFanoutOrderCreatedFinancialNotification(Queue fanoutQueueOrderCreatedFinancialNotification, FanoutExchange fanoutExchangeOrderCreated) {
+        return BindingBuilder.bind(fanoutQueueOrderCreatedFinancialNotification).to(fanoutExchangeOrderCreated);
     }
-    */
 
 }

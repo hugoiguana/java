@@ -47,4 +47,14 @@ public class Consumer {
         }
     }
 
+    @RabbitListener(queues = "#{rabbitMqConfiguration.fanoutQueueOrderCreatedFinancialNotification()}")
+    public void fanoutOrderCreatedFinancialNotificationListener(Message message) {
+        try {
+            OrderCreatedMsgDto orderCreatedMsgDto = objectMapper.readValue(message.getBody(), OrderCreatedMsgDto.class);
+            log.info("Consumer.fanoutOrderCreatedFinancialNotificationListener - {}", orderCreatedMsgDto.toString());
+        } catch (Exception e) {
+            log.error("Consumer.fanoutOrderCreatedFinancialNotificationListener - Error: {}", e.getMessage(), e);
+        }
+    }
+
 }

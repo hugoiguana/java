@@ -2,6 +2,8 @@ package com.hugo.java.springboot.rabbitmq.service_producer.messaging.producer.co
 
 public class RoutingKeyConstants {
 
+    public static final String FANOUT_EMPTY = "";
+
     public static final String TOPIC_ORDER_CREATED = "topic.order.created";
 
     public static final String DIRECT_ORDER_CREATED = "direct.order.created";

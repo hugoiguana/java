@@ -41,4 +41,15 @@ public class Producer {
         }
     }
 
+    public void sendOrderCreatedFanoutMsg(OrderCreatedMsgDto orderCreatedMsgDto) {
+        try {
+            String msg = objectMapper.writeValueAsString(orderCreatedMsgDto);
+            rabbitTemplate.convertAndSend(ExchangeConstants.FANOUT_ORDER_CREATED, RoutingKeyConstants.FANOUT_EMPTY, msg);
+            log.info("Producer.sendOrderCreatedFanoutMsg - msg sent - traceId={} - productId={}", orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
+        } catch (Exception e) {
+            log.error("Producer.sendOrderCreatedFanoutMsg - Error= {}", e.getMessage(), e);
+            throw new SendCreateOrderMsgException(e, orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
+        }
+    }
+
 }

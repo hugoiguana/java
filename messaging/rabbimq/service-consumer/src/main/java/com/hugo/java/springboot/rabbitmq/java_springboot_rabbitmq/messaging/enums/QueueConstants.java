@@ -7,4 +7,6 @@ public class QueueConstants {
 
     public final static String DIRECT_ORDER_CREATED_FINANCIAL_NOTIFICATION = "direct-order-created-financial-notification";
 
+    public final static String FANOUT_ORDER_CREATED_FINANCIAL_NOTIFICATION = "fanout-order-created-financial-notification";
+
 }

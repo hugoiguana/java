@@ -28,7 +28,7 @@ public class Application implements CommandLineRunner {
                 OrderCreatedMsgDto.builder()
                         .traceId(UUID.randomUUID())
                         .productId(UUID.randomUUID())
-                        .quantity(2)
+                        .quantity(1)
                         .build()
         );
 
@@ -36,7 +36,15 @@ public class Application implements CommandLineRunner {
                 OrderCreatedMsgDto.builder()
                         .traceId(UUID.randomUUID())
                         .productId(UUID.randomUUID())
-                        .quantity(1)
+                        .quantity(2)
+                        .build()
+        );
+
+        producer.sendOrderCreatedFanoutMsg(
+                OrderCreatedMsgDto.builder()
+                        .traceId(UUID.randomUUID())
+                        .productId(UUID.randomUUID())
+                        .quantity(3)
                         .build()
         );
 

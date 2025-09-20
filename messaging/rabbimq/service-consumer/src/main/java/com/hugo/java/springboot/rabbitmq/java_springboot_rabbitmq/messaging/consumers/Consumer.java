@@ -18,22 +18,32 @@ public class Consumer {
     ObjectMapper objectMapper;
 
     @RabbitListener(queues = QueueConstants.TOPIC_ORDER_CREATED_USER_SEND_EMAIL_NOTIFICATION)
-    public void orderCreatedUserSendEmailNotificationListener(Message message) {
+    public void topicOrderCreatedUserSendEmailNotificationListener(Message message) {
         try {
             OrderCreatedMsgDto orderCreatedMsgDto = objectMapper.readValue(message.getBody(), OrderCreatedMsgDto.class);
-            log.info("Consumer.orderCreatedUserSendEmailNotificationListener - {}", orderCreatedMsgDto.toString());
+            log.info("Consumer.topicOrderCreatedUserSendEmailNotificationListener - {}", orderCreatedMsgDto.toString());
         } catch (Exception e) {
-            log.error("Consumer.orderCreatedUserSendEmailNotificationListener - Error: {}", e.getMessage(), e);
+            log.error("Consumer.topicOrderCreatedUserSendEmailNotificationListener - Error: {}", e.getMessage(), e);
         }
     }
 
     @RabbitListener(queues = QueueConstants.TOPIC_ORDER_CREATED_FINANCIAL_NOTIFICATION)
-    public void orderCreatedFinancialNotificationListener(Message message) {
+    public void topicOrderCreatedFinancialNotificationListener(Message message) {
         try {
             OrderCreatedMsgDto orderCreatedMsgDto = objectMapper.readValue(message.getBody(), OrderCreatedMsgDto.class);
-            log.info("Consumer.orderCreatedFinancialNotificationListener - {}", orderCreatedMsgDto.toString());
+            log.info("Consumer.topicOrderCreatedFinancialNotificationListener - {}", orderCreatedMsgDto.toString());
         } catch (Exception e) {
-            log.error("Consumer.orderCreatedFinancialNotificationListener - Error: {}", e.getMessage(), e);
+            log.error("Consumer.topicOrderCreatedFinancialNotificationListener - Error: {}", e.getMessage(), e);
+        }
+    }
+
+    @RabbitListener(queues = QueueConstants.DIRECT_ORDER_CREATED_FINANCIAL_NOTIFICATION)
+    public void directOrderCreatedFinancialNotificationListener(Message message) {
+        try {
+            OrderCreatedMsgDto orderCreatedMsgDto = objectMapper.readValue(message.getBody(), OrderCreatedMsgDto.class);
+            log.info("Consumer.directOrderCreatedFinancialNotificationListener - {}", orderCreatedMsgDto.toString());
+        } catch (Exception e) {
+            log.error("Consumer.directOrderCreatedFinancialNotificationListener - Error: {}", e.getMessage(), e);
         }
     }
 

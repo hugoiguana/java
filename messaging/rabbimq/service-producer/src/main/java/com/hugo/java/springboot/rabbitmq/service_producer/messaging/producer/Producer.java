@@ -19,13 +19,24 @@ public class Producer {
 
     RabbitTemplate rabbitTemplate;
 
-    public void sendOrderCreated(OrderCreatedMsgDto orderCreatedMsgDto) {
+    public void sendOrderCreatedTopicMsg(OrderCreatedMsgDto orderCreatedMsgDto) {
         try {
             String msg = objectMapper.writeValueAsString(orderCreatedMsgDto);
             rabbitTemplate.convertAndSend(ExchangeConstants.TOPIC_ORDER_CREATED, RoutingKeyConstants.TOPIC_ORDER_CREATED, msg);
-            log.info("Producer.sendOrderCreated - msg sent - traceId={} - productId={}", orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
+            log.info("Producer.sendOrderCreatedTopicMsg - msg sent - traceId={} - productId={}", orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
         } catch (Exception e) {
-            log.error("Producer.sendOrderCreated - Error= {}", e.getMessage(), e);
+            log.error("Producer.sendOrderCreatedTopicMsg - Error= {}", e.getMessage(), e);
+            throw new SendCreateOrderMsgException(e, orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
+        }
+    }
+
+    public void sendOrderCreatedDirectMsg(OrderCreatedMsgDto orderCreatedMsgDto) {
+        try {
+            String msg = objectMapper.writeValueAsString(orderCreatedMsgDto);
+            rabbitTemplate.convertAndSend(ExchangeConstants.DIRECT_ORDER_CREATED, RoutingKeyConstants.DIRECT_ORDER_CREATED, msg);
+            log.info("Producer.sendOrderCreatedDirectMsg - msg sent - traceId={} - productId={}", orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
+        } catch (Exception e) {
+            log.error("Producer.sendOrderCreatedDirectMsg - Error= {}", e.getMessage(), e);
             throw new SendCreateOrderMsgException(e, orderCreatedMsgDto.getTraceId(), orderCreatedMsgDto.getProductId());
         }
     }

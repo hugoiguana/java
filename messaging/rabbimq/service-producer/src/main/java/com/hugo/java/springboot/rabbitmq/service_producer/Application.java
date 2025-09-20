@@ -24,11 +24,19 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-        producer.sendOrderCreated(
+        producer.sendOrderCreatedTopicMsg(
                 OrderCreatedMsgDto.builder()
                         .traceId(UUID.randomUUID())
                         .productId(UUID.randomUUID())
                         .quantity(2)
+                        .build()
+        );
+
+        producer.sendOrderCreatedDirectMsg(
+                OrderCreatedMsgDto.builder()
+                        .traceId(UUID.randomUUID())
+                        .productId(UUID.randomUUID())
+                        .quantity(1)
                         .build()
         );
 
